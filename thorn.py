@@ -68,7 +68,47 @@ class Thorn:
         if result is not None:
             print(result)
 
+class ImageThorn:
+    def __init__(self):
+        self.session = requests.Session()
+
+    def scrape_images(self, url, output_folder="./images"):
+        try:
+            response = self.session.get(url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Create the output folder if it doesn't exist
+            os.makedirs(output_folder, exist_ok=True)
+
+            # Find all image tags in the HTML
+            img_tags = soup.find_all('img')
+
+            for img_tag in img_tags:
+                img_url = img_tag.get('src')
+                if img_url:
+                    img_url = img_url.strip()
+                    img_name = os.path.basename(img_url)
+
+                    # Construct the complete image URL
+                    if not img_url.startswith('http'):
+                        img_url = url + img_url
+
+                    img_response = self.session.get(img_url)
+
+                    # Save the image to the output folder
+                    with open(os.path.join(output_folder, img_name), 'wb') as img_file:
+                        img_file.write(img_response.content)
+
+            print(f"Images scraped and saved to {output_folder}")
+        except requests.exceptions.RequestException as e:
+            print(f"Error: {e}")
+
 # Usage example
 if __name__ == "__main__":
     thorn = Thorn()
-    thorn.scrape_user_choice()
+    image_thorn = ImageThorn()
+
+    thorn.scrape_user_choice()  # Use the Thorn class to scrape other content
+    image_thorn.scrape_images("https://legends.dbz.space/characters/", output_folder="./images")
+
