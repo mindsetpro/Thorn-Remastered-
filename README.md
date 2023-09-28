@@ -17,7 +17,7 @@
 You can install Thorn Remastered via pip:
 
 ```bash
-pip install thorn-remastered
+pip install thorn.py-remast
 ```
 
 ## Usage
