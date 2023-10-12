@@ -92,3 +92,5 @@ Special thanks to the original Thorn.py project for inspiration.
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 ```
+
+Made by ^mind-set
